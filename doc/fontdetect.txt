@@ -12,19 +12,19 @@
 1.  Introduction                                    *fontdetect-intro*
 
 There are some rough edges in Vim related to the detection of fonts.  Vim
-supplies the *getfontname()* function that seems ideal for detecting whether a
-font is available, but there are a couple of problems.  First, *getfontname()*
-cannot be called until the GUI has started (i.e., until the *GUIEnter* event
+supplies the |getfontname()| function that seems ideal for detecting whether a
+font is available, but there are a couple of problems.  First, |getfontname()|
+cannot be called until the GUI has started (i.e., until the |GUIEnter| event
 occurs), which means that it can't be used from .vimrc (or .gvimrc).  This
 makes it hard to define other settings that depend on the font (e.g., the
 Powerline plugin's g:Powerline_symbols setting must be defined before
-*GUIEnter* occurs). 
+|GUIEnter| occurs). 
 
 In addition, the GTK2 GUI seems unable to determine whether a given font is
-installed, so *getfontname()* always simply returns the input argument,
+installed, so |getfontname()| always simply returns the input argument,
 and setting 'guifont' always succeeds even if the font is not present.
 
-*fontdetect* works around these issues, providing methods for detecting which
+|fontdetect| works around these issues, providing methods for detecting which
 fonts are installed on the system.
 
 At present, the following platforms are supported:
@@ -57,7 +57,7 @@ the downloaded archive into a bundle directory, e.g.: >
 ===============================================================================
 3.  Usage                                           *fontdetect-usage*
 
-*fontdetect* provides the following functions.  A font family should be
+|fontdetect| provides the following functions.  A font family should be
 specified as a string with spaces (not underscores), e.g. "DejaVu Sans Mono",
 "Consolas", etc.
 
