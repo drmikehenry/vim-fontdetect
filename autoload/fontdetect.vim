@@ -2,10 +2,10 @@
 
 " Distributed under Vim's |license|; see |fontdetect.txt| for details.
 
-if exists("loaded_fontdetect")
+if exists("autoloaded_fontdetect")
     finish
 endif
-let loaded_fontdetect = 1
+let autoloaded_fontdetect = 1
 
 " Save 'cpoptions' and set Vim default to enable line continuations.
 let s:save_cpoptions = &cpoptions
