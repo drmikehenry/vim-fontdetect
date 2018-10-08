@@ -2,7 +2,7 @@
 
 " Distributed under Vim's |license|; see |fontdetect.txt| for details.
 
-if exists("autoloaded_fontdetect")
+if exists('autoloaded_fontdetect')
     finish
 endif
 let autoloaded_fontdetect = 1
@@ -15,7 +15,7 @@ set cpoptions&vim
 
 " Query Windows registry to return list of all installed font families.
 function! fontdetect#_listFontFamiliesUsingWindowsRegistry()
-    if !executable("reg")
+    if !executable('reg')
         return []
     endif
     let regOutput = system('reg query "HKLM\SOFTWARE\Microsoft' .
@@ -38,16 +38,16 @@ function! fontdetect#_listFontFamiliesUsingWindowsRegistry()
     " Throw away everything before and after the font family.
     " Assume that any '(' is not part of the family name.
     " Assume digits followed by comma indicates point size.
-    let regOutput = substitute(regOutput, 
+    let regOutput = substitute(regOutput,
             \ ' *\(.\{-}\)\ *' .
             \ '\((\|\d\+,\|REG_SZ\)' .
-            \ '.\{-}\n', 
+            \ '.\{-}\n',
             \ '\1\n', 'g')
 
     return split(regOutput, '\n')
 endfunction
 
-if has("python")
+if has('python')
 " Python function for detecting installed font families using Cocoa.
 python << endpython
 def fontdetect_listFontFamiliesUsingCocoa():
@@ -63,8 +63,8 @@ endif
 
 " Use Cocoa font manager to return list of all installed font families.
 function! fontdetect#_listFontFamiliesUsingCocoa()
-    if has("python")
-        return pyeval("fontdetect_listFontFamiliesUsingCocoa()")
+    if has('python')
+        return pyeval('fontdetect_listFontFamiliesUsingCocoa()')
     else
         return []
     endif
@@ -72,10 +72,10 @@ endfunction
 
 " Use fontconfig's ``fc-list`` to return list of all installed font families.
 function! fontdetect#_listFontFamiliesUsingFontconfig()
-    if !executable("fc-list")
+    if !executable('fc-list')
         return []
     endif
-    let fcOutput = system("fc-list --format '%{family}\n'")
+    let fcOutput = system('fc-list --format '%{family}\n'')
     return split(fcOutput, '\n')
 endfunction
 
@@ -83,21 +83,21 @@ function! fontdetect#_fontDict()
     if exists('g:fontdetect#_cachedFontDict')
         return g:fontdetect#_cachedFontDict
     endif
-    if has("win32")
+    if has('win32')
         let families = fontdetect#_listFontFamiliesUsingWindowsRegistry()
-    elseif has("macunix")
+    elseif has('macunix')
         let families = fontdetect#_listFontFamiliesUsingCocoa()
         if len(families) == 0
             " Try falling back on Fontconfig.
             let families = fontdetect#_listFontFamiliesUsingFontconfig()
         endif
-    elseif executable("fc-list")
+    elseif executable('fc-list')
         let families = fontdetect#_listFontFamiliesUsingFontconfig()
     else
         let families = []
     endif
     if len(families) == 0
-        echomsg "No way to detect fonts"
+        echomsg 'No way to detect fonts'
     endif
     let g:fontdetect#_cachedFontDict = {}
     for fontFamily in families
@@ -118,7 +118,7 @@ function! fontdetect#firstFontFamily(fontFamilies)
             return fontFamily
         endif
     endfor
-    return ""
+    return ''
 endfunction
 
 " Restore saved 'cpoptions'.
