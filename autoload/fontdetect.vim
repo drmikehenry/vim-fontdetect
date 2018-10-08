@@ -11,7 +11,7 @@ let g:autoloaded_fontdetect = 1
 let s:save_cpoptions = &cpoptions
 set cpoptions&vim
 
-" Private functions.
+" Private functions and variables.
 
 " Query Windows registry to return list of all installed font families.
 function! fontdetect#_listFontFamiliesUsingWindowsRegistry()
@@ -47,9 +47,36 @@ function! fontdetect#_listFontFamiliesUsingWindowsRegistry()
     return split(regOutput, '\n')
 endfunction
 
-if has('python')
-" Python function for detecting installed font families using Cocoa.
-python << endpython
+" Double any quotes in string, then wrap with quotes for eval().
+function! fontdetect#_quote(string)
+    return "'" . substitute(a:string, "'", "''", 'g') . "'"
+endfunction
+
+if has('pythonx')
+    let fontdetect#_python = 'pythonx'
+    let fontdetect#_pyevalFunction = 'pyxeval'
+elseif has('python3')
+    let fontdetect#_python = 'python3'
+    let fontdetect#_pyevalFunction = 'py3eval'
+elseif has('python')
+    let fontdetect#_python = 'python'
+    let fontdetect#_pyevalFunction = 'pyeval'
+else
+    let fontdetect#_python = ''
+    let fontdetect#_pyevalFunction = ''
+endif
+
+if fontdetect#_python != ''
+
+" Evaluate pythonSource using the detected version of Python.
+function! fontdetect#_pyeval(pythonSource)
+    let quotedSource = fontdetect#_quote(a:pythonSource)
+    return eval(fontdetect#_pyevalFunction . '(' . quotedSource . ')')
+endfunction
+
+function fontdetect#_setupPythonFunctions()
+    " Python function for detecting installed font families using Cocoa.
+    execute fontdetect#_python . '<< endpython'
 def fontdetect_listFontFamiliesUsingCocoa():
     try:
         import Cocoa
@@ -59,12 +86,15 @@ def fontdetect_listFontFamiliesUsingCocoa():
     fontFamilies = list(manager.availableFontFamilies())
     return fontFamilies
 endpython
+endfunction
+
+call fontdetect#_setupPythonFunctions()
 endif
 
 " Use Cocoa font manager to return list of all installed font families.
 function! fontdetect#_listFontFamiliesUsingCocoa()
-    if has('python')
-        return pyeval('fontdetect_listFontFamiliesUsingCocoa()')
+    if fontdetect#_python != ''
+        return fontdetect#_pyeval('fontdetect_listFontFamiliesUsingCocoa()')
     else
         return []
     endif
@@ -75,7 +105,7 @@ function! fontdetect#_listFontFamiliesUsingFontconfig()
     if !executable('fc-list')
         return []
     endif
-    let fcOutput = system('fc-list --format '%{family}\n'')
+    let fcOutput = system("fc-list --format '%{family}\n'")
     return split(fcOutput, '\n')
 endfunction
 
