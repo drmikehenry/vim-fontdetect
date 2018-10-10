@@ -53,34 +53,34 @@ function! fontdetect#_quote(string)
 endfunction
 
 if has('pythonx')
-    let fontdetect#_python = 'pythonx'
-    let fontdetect#_pyevalFunction = 'pyxeval'
+    let s:fontdetect_python = 'pythonx'
+    let s:fontdetect_pyevalFunction = 'pyxeval'
 elseif has('python3')
-    let fontdetect#_python = 'python3'
-    let fontdetect#_pyevalFunction = 'py3eval'
+    let s:fontdetect_python = 'python3'
+    let s:fontdetect_pyevalFunction = 'py3eval'
 elseif has('python')
-    let fontdetect#_python = 'python'
-    let fontdetect#_pyevalFunction = 'pyeval'
+    let s:fontdetect_python = 'python'
+    let s:fontdetect_pyevalFunction = 'pyeval'
 else
-    let fontdetect#_python = ''
-    let fontdetect#_pyevalFunction = ''
+    let s:fontdetect_python = ''
+    let s:fontdetect_pyevalFunction = ''
 endif
 
-if fontdetect#_python != ''
+if s:fontdetect_python != ''
 
 " Evaluate pythonSource using the detected version of Python.
 function! fontdetect#_pyeval(pythonSource)
     let quotedSource = fontdetect#_quote(a:pythonSource)
-    return eval(fontdetect#_pyevalFunction . '(' . quotedSource . ')')
+    return eval(s:fontdetect_pyevalFunction . '(' . quotedSource . ')')
 endfunction
 
 function fontdetect#_setupPythonFunctions()
     " Python function for detecting installed font families using Cocoa.
-    execute fontdetect#_python . '<< endpython'
+    execute s:fontdetect_python . ' << endpython'
 def fontdetect_listFontFamiliesUsingCocoa():
     try:
         import Cocoa
-    except ImportError:
+    except (ImportError, AttributeError):
         return []
     manager = Cocoa.NSFontManager.sharedFontManager()
     fontFamilies = list(manager.availableFontFamilies())
@@ -93,7 +93,7 @@ endif
 
 " Use Cocoa font manager to return list of all installed font families.
 function! fontdetect#_listFontFamiliesUsingCocoa()
-    if fontdetect#_python != ''
+    if s:fontdetect_python != ''
         return fontdetect#_pyeval('fontdetect_listFontFamiliesUsingCocoa()')
     else
         return []
