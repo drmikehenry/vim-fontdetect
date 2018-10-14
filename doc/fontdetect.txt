@@ -48,12 +48,24 @@ Then, re-generate your help tags with Vim's |:helptags| command, e.g.: >
 
   :helptags ~/.vim/doc
 
-You may also install fontdetect using a tool like pathogen[1] by unpacking
+You may also install |fontdetect| using a tool like pathogen[1] by unpacking
 the downloaded archive into a bundle directory, e.g.: >
 
   ~/.vim/bundle/fontdetect
 
 [1]: https://github.com/tpope/vim-pathogen
+
+-------------------------------------------------------------------------------
+2.1   Mac OS X                                      *fontdetect-macosx*
+
+On Mac OS X |fontdetect| utilizes the Cocoa library in Python.  If not using the
+system-supplied Python 2.7 you must install pyobjc-framework-cocoa via pip: >
+
+  pip2 install pyobjc-framework-cocoa
+
+or: >
+
+  pip3 install pyobjc-framework-cocoa
 
 ===============================================================================
 3.  Usage                                           *fontdetect-usage*
