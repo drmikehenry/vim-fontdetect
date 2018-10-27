@@ -96,9 +96,9 @@ fontdetect#firstFontFamily([{fontFamilies}])    |fontdetect#firstFontFamily|
 ===============================================================================
 4.  ChangeLog                                       |fontdetect-changelog|
 
-Version 0.3.0    Date    2018-10-08                 *fontdetect-changelog-0.3.0*
+Version 0.3.0    Date    2018-10-27                 *fontdetect-changelog-0.3.0*
 
-  - Support for Python 3 in addition to Python 2.
+  - Support for Python 3 in addition to Python 2 (thanks to Mike Haig).
 
 Version 0.2.2    Date    2013-10-03                 *fontdetect-changelog-0.2.2*
 
@@ -126,6 +126,10 @@ Developed by Michael Henry (vim at drmikehenry.com).
 Distributed under Vim's |license|.
 
 Git repository:       https://github.com/drmikehenry/vim-fontdetect
+
+Contributors (in chronological order):
+
+- Mike Haig
 
 ===============================================================================
 vim:sts=2:et:ai:tw=78:fo=tcq2:ft=help:
